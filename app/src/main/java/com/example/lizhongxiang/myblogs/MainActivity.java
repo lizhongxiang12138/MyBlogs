@@ -2,9 +2,8 @@ package com.example.lizhongxiang.myblogs;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import com.example.lizhongxiang.myblogs.adapter.ZHAbstractAdapter;
+import com.example.lizhongxiang.myblogs.model.ZHAbstractModel;
+
+import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +45,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //添加listView的數據
+        LinkedList<ZHAbstractModel> zhAbstractModels = new LinkedList<>();
+        for (int i=0;i<30;i++){
+            zhAbstractModels.add(new ZHAbstractModel("測試"+i));
+        }
+        ListView zhAbstractList = (ListView) findViewById(R.id.zh_abstract_list);
+        zhAbstractList.setAdapter(new ZHAbstractAdapter(zhAbstractModels,getApplicationContext()));
     }
 
     @Override
