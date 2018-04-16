@@ -13,18 +13,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+
 import com.example.lizhongxiang.myblogs.adapter.ZHAbstractAdapter;
 import com.example.lizhongxiang.myblogs.model.ZHAbstractModel;
 
 import java.util.LinkedList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.zh_abstract_list)
+    ListView zhAbstractList;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.nav_view)
+    NavigationView navView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -48,11 +65,11 @@ public class MainActivity extends AppCompatActivity
 
         //添加listView的數據
         LinkedList<ZHAbstractModel> zhAbstractModels = new LinkedList<>();
-        for (int i=0;i<30;i++){
-            zhAbstractModels.add(new ZHAbstractModel("測試"+i));
+        for (int i = 0; i < 30; i++) {
+            zhAbstractModels.add(new ZHAbstractModel("測試" + i));
         }
-        ListView zhAbstractList = (ListView) findViewById(R.id.zh_abstract_list);
-        zhAbstractList.setAdapter(new ZHAbstractAdapter(zhAbstractModels,getApplicationContext()));
+
+        zhAbstractList.setAdapter(new ZHAbstractAdapter(zhAbstractModels, getApplicationContext()));
     }
 
     @Override
