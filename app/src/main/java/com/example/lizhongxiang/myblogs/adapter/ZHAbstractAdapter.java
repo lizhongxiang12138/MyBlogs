@@ -11,6 +11,9 @@ import com.example.lizhongxiang.myblogs.model.ZHAbstractModel;
 
 import java.util.LinkedList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by lizhongxiang on
  *
@@ -19,17 +22,17 @@ import java.util.LinkedList;
  */
 public class ZHAbstractAdapter extends BaseAdapter {
 
-    private LinkedList<ZHAbstractModel> zhAbstractModels;
+    private ZHAbstractModel zhAbstractModel;
     private Context mConext;
 
-    public ZHAbstractAdapter(LinkedList<ZHAbstractModel> zhAbstractModels, Context mConext) {
-        this.zhAbstractModels = zhAbstractModels;
+    public ZHAbstractAdapter(ZHAbstractModel zhAbstractModel, Context mConext) {
+        this.zhAbstractModel = zhAbstractModel;
         this.mConext = mConext;
     }
 
     @Override
     public int getCount() {
-        return zhAbstractModels.size();
+        return zhAbstractModel.getStories().size();
     }
 
     @Override
@@ -44,9 +47,25 @@ public class ZHAbstractAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(mConext).inflate(R.layout.list_zh_abstract_item,parent,false);
-        TextView zhItemAbstract = (TextView)convertView.findViewById(R.id.zh_item_abstract);
-        zhItemAbstract.setText(zhAbstractModels.get(position).getAbstractText());
+
+        ZHAbstractAdapter.ViewHolder holder;
+
+        if(null == convertView){
+            convertView = LayoutInflater.from(mConext).inflate(R.layout.list_zh_abstract_item,parent,false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        }else{
+            holder = (ViewHolder) convertView.getTag();
+        }
+        holder.zhItemAbstract.setText(zhAbstractModel.getStories().get(position).getTitle());
         return convertView;
+    }
+
+    static class ViewHolder{
+        @BindView(R.id.zh_item_abstract) TextView zhItemAbstract;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this,view);
+        }
     }
 }

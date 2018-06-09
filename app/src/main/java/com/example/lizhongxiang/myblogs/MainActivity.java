@@ -1,6 +1,8 @@
 package com.example.lizhongxiang.myblogs;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -15,16 +17,25 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.example.lizhongxiang.myblogs.adapter.ZHAbstractAdapter;
+import com.example.lizhongxiang.myblogs.http.ZHApi;
 import com.example.lizhongxiang.myblogs.model.ZHAbstractModel;
 
+import java.io.IOException;
 import java.util.LinkedList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    Handler handler;
+
+    ZHAbstractModel zhAbstractModel;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -63,13 +74,34 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //添加listView的數據
+        //添加 listView 数据
         LinkedList<ZHAbstractModel> zhAbstractModels = new LinkedList<>();
-        for (int i = 0; i < 30; i++) {
-            zhAbstractModels.add(new ZHAbstractModel("測試" + i));
+        for (int i = 0; i < 10; i++) {
+            //zhAbstractModels.add(new ZHAbstractModel("測試" + i));
         }
 
-        zhAbstractList.setAdapter(new ZHAbstractAdapter(zhAbstractModels, getApplicationContext()));
+        Retrofit zhRetrofit = new Retrofit.Builder().baseUrl("https://news-at.zhihu.com").addConverterFactory(JacksonConverterFactory.create()).build();
+        ZHApi zhApi = zhRetrofit.create(ZHApi.class);
+        final Call<ZHAbstractModel> zhAbstractModelCall = zhApi.newsLatest();
+
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                zhAbstractList.setAdapter(new ZHAbstractAdapter(zhAbstractModel, getApplicationContext()));
+            }
+        };
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    zhAbstractModel = zhAbstractModelCall.execute().body();
+                    handler.sendEmptyMessage(0);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override
