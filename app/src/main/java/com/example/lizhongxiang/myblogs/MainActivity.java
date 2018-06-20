@@ -25,6 +25,7 @@ import java.util.LinkedList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -80,7 +81,9 @@ public class MainActivity extends AppCompatActivity
             //zhAbstractModels.add(new ZHAbstractModel("測試" + i));
         }
 
-        Retrofit zhRetrofit = new Retrofit.Builder().baseUrl("https://news-at.zhihu.com").addConverterFactory(JacksonConverterFactory.create()).build();
+        Retrofit zhRetrofit = new Retrofit.Builder().baseUrl("https://news-at.zhihu.com")
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
         ZHApi zhApi = zhRetrofit.create(ZHApi.class);
         final Call<ZHAbstractModel> zhAbstractModelCall = zhApi.newsLatest();
 

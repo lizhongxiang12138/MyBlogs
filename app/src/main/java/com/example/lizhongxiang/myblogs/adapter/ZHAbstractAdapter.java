@@ -5,7 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
 import com.example.lizhongxiang.myblogs.R;
 import com.example.lizhongxiang.myblogs.model.ZHAbstractModel;
 
@@ -58,11 +62,15 @@ public class ZHAbstractAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.zhItemAbstract.setText(zhAbstractModel.getStories().get(position).getTitle());
+        Glide.with(mConext).load(zhAbstractModel.getStories().get(position).getImages().get(0))
+                .into(holder.imageView);
         return convertView;
     }
 
     static class ViewHolder{
         @BindView(R.id.zh_item_abstract) TextView zhItemAbstract;
+        @BindView(R.id.zh_item_abstract_image)
+        ImageView imageView;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this,view);
