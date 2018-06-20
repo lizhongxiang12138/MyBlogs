@@ -15,7 +15,7 @@
 
             <ImageView
                 android:id="@+id/zh_item_abstract_image"
-                android:layout_width="56dp"
+                android:layout_width="fill_parent"
                 android:layout_height="56dp" />
         </LinearLayout>
 
